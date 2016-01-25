@@ -112,6 +112,7 @@ def main():
     module = AnsibleModule(
         argument_spec = dict(
             name = dict(required=True),
+            enabled = dict(type='bool'),
             arguments = dict(aliases=['args'], default=''),
         ),
         supports_check_mode=True
@@ -133,6 +134,21 @@ def main():
             module.fail_json(msg=err)
         else:
             module.fail_json(msg=out)
+
+    if module.params.get('enabled') is not None:
+        action = 'enable'
+        if not module.params.get('enabled'):
+            action = 'disable'
+
+        cmd = "systemctl %s %s" % (action, name)
+
+        (rc, out, err) = execute_command(module, cmd)
+
+        if rc != 0:
+            if err:
+                module.fail_json(msg=err)
+            else:
+                module.fail_json(msg=out)
 
     result = {}
     result['name'] = name

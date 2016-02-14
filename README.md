@@ -13,6 +13,8 @@ instead of doing a stop/start which is what the core `service` module does.
 This module was written in response to
 [ansible/ansible-modules-core#1836](https://github.com/ansible/ansible-modules-core/issues/1836).
 
+If passed `reload=yes` it will execute `systemctl reload <name>` instead.
+
 Example:
 
 ```

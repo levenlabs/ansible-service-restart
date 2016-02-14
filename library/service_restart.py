@@ -114,6 +114,7 @@ def main():
             name = dict(required=True),
             enabled = dict(type='bool'),
             arguments = dict(aliases=['args'], default=''),
+            reload = dict(type='bool'),
         ),
         supports_check_mode=True
     )
@@ -124,6 +125,9 @@ def main():
         module.exit_json(changed=True, msg='restarting service')
 
     action = 'restart'
+    if module.params.get('reload'):
+        action = 'reload'
+
     addl_arguments = module.params.get('arguments', '')
     cmd = "systemctl %s %s %s" % (action, name, addl_arguments)
 
